@@ -19,6 +19,11 @@ export default new Router({
       component: loadView("home")
     },
     {
+      path: "/map",
+      name: "map",
+      component: loadView("map")
+    },
+    {
       path: "*",
       redirect: "/404"
     }
