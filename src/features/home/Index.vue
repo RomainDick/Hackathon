@@ -1,29 +1,38 @@
 <template>
-  <section class="home">Home page</section>
+  <section class="home">
+    <h1 v-if="areaZone">{{ areaZone.fields.location }}</h1>
+  </section>
 </template>
 
 <script>
-// import Banner from '@/shared/Banner';
-
-import * as fromTypes from "@/store/types.js";
+import axios from 'axios';
 
 export default {
   name: "home",
+
+  data() {
+    return {
+      coordinates: null,
+      areaZone: null
+    }
+  },
 
   components: {
     // Banner,
   },
 
-  computed: {},
+  computed: {
+  },
 
   mounted() {
-    // this.$store.dispatch(
-    //   fromTypes.GET_ITEMS_PREF,
-    //   {
-    //     department : this.getUserData.department,
-    //     categories : this.getUserData.categories,
-    //   }
-    // );
+    this.$getLocation({
+    }).then(coordinates => {
+      axios.get('https://public.opendatasoft.com/api/records/1.0/search/?dataset=openaq&rows=1&sort=measurements_lastupdated&geofilter.distance=' + coordinates.lat+ '%2C' + coordinates.lng + '%2C3000')
+              .then((response) => {
+                this.areaZone = response.data.records[0]
+              })
+      this.coordinates = coordinates
+    });
   },
 
   methods: {}
