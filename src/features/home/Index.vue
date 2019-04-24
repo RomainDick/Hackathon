@@ -1,58 +1,91 @@
 <template>
   <section class="home">
-
-    <div class="block-home">
+    <div v-if="areaZone" class="block-home">
       <div class="info">
         <div class="info_title-area">
           <h1 class="info_title-area_title">Pollution de l'air à {{ areaZone.fields.location }}</h1>
         </div>
         <div class="info_content-area">
           <h3>LIVE</h3>
-          <div class="info_content-area_quality" v-if="areaZone.fields.measurements_value >= 0 && areaZone.fields.measurements_value < 8.5">
+          <div
+            class="info_content-area_quality"
+            v-if="areaZone.fields.measurements_value >= 0 && areaZone.fields.measurements_value < 8.5"
+          >
             <h2 class="info_content-area_quality_title">Très correcte</h2>
             <i class="fas fa-check-circle very-correct info_content-area_quality_correct"></i>
-            <p class="info_content-area_quality_value">{{ areaZone.fields.measurements_value + ' ' + areaZone.fields.measurements_unit}}</p>
+            <p
+              class="info_content-area_quality_value"
+            >{{ areaZone.fields.measurements_value + ' ' + areaZone.fields.measurements_unit}}</p>
           </div>
-          <div class="info_content-area_quality" v-if="areaZone.fields.measurements_value >= 8.5 && areaZone.fields.measurements_value < 13">
+          <div
+            class="info_content-area_quality"
+            v-if="areaZone.fields.measurements_value >= 8.5 && areaZone.fields.measurements_value < 13"
+          >
             <h2 class="info_content-area_quality_title">Correcte</h2>
             <i class="fas fa-check-circle correct info_content-area_quality_correct"></i>
-            <p class="info_content-area_quality_value">{{ areaZone.fields.measurements_value + ' ' + areaZone.fields.measurements_unit}}</p>
+            <p
+              class="info_content-area_quality_value"
+            >{{ areaZone.fields.measurements_value + ' ' + areaZone.fields.measurements_unit}}</p>
           </div>
-          <div class="info_content-area_quality" v-if="areaZone.fields.measurements_value >= 13 && areaZone.fields.measurements_value < 18">
+          <div
+            class="info_content-area_quality"
+            v-if="areaZone.fields.measurements_value >= 13 && areaZone.fields.measurements_value < 18"
+          >
             <h2 class="info_content-area_quality_title">Moyen</h2>
             <i class="fas fa-check-circle medium info_content-area_quality_correct"></i>
-            <p class="info_content-area_quality_value">{{ areaZone.fields.measurements_value + ' ' + areaZone.fields.measurements_unit}}</p>
+            <p
+              class="info_content-area_quality_value"
+            >{{ areaZone.fields.measurements_value + ' ' + areaZone.fields.measurements_unit}}</p>
           </div>
-          <div class="info_content-area_quality" v-if="areaZone.fields.measurements_value >= 18 && areaZone.fields.measurements_value < 22">
+          <div
+            class="info_content-area_quality"
+            v-if="areaZone.fields.measurements_value >= 18 && areaZone.fields.measurements_value < 22"
+          >
             <h2 class="info_content-area_quality_title">Mauvais</h2>
             <i class="fas fa-times-circle bad info_content-area_quality_correct"></i>
-            <p class="info_content-area_quality_value">{{ areaZone.fields.measurements_value + ' ' + areaZone.fields.measurements_unit}}</p>
+            <p
+              class="info_content-area_quality_value"
+            >{{ areaZone.fields.measurements_value + ' ' + areaZone.fields.measurements_unit}}</p>
           </div>
-          <div class="info_content-area_quality" v-if="areaZone.fields.measurements_value >= 22 && areaZone.fields.measurements_value < 100000">
+          <div
+            class="info_content-area_quality"
+            v-if="areaZone.fields.measurements_value >= 22 && areaZone.fields.measurements_value < 100000"
+          >
             <h2 class="info_content-area_quality_title">Très mauvais</h2>
             <i class="fas fa-times-circle very-bad info_content-area_quality_correct"></i>
-            <p class="info_content-area_quality_value">{{ areaZone.fields.measurements_value + ' ' + areaZone.fields.measurements_unit}}</p>
+            <p
+              class="info_content-area_quality_value"
+            >{{ areaZone.fields.measurements_value + ' ' + areaZone.fields.measurements_unit}}</p>
           </div>
         </div>
       </div>
-
-      {{ areaZone }}
-
-      <div class="map">
-            <GmapMap
-              v-if="coordinates"
-              :center="{lat:coordinates.lat, lng:coordinates.lng}"
-              :zoom="13"
-              map-type-id="terrain"
-              style="width: 100%; height: 100%"
-            >
-              <gmap-marker
-                :key="index"
-                v-for="(m, index) in markers"
-                :position="m.position"
-                @click="center=m.position"
-              ></gmap-marker>
-            </GmapMap>
+      <div v-if="coordinates" class="map">
+        <GmapMap
+          :center="{lat:coordinates.lat, lng:coordinates.lng}"
+          :zoom="13"
+          map-type-id="terrain"
+          style="width: 100%; height: 100%"
+        >
+          <gmap-marker
+            :key="ownMarker"
+            :position="ownMarker.position"
+            :icon="ownMarker.icon"
+            @click="center=ownMarker.position"
+          ></gmap-marker>
+          <gmap-marker
+            :key="index"
+            v-for="(m, index) in markers"
+            :position="m.position"
+            @click="center=m.position"
+          ></gmap-marker>
+          <GmapCircle
+            :key="index"
+            v-for="(m, index) in markers"
+            :center="m.position"
+            :radius="2000"
+            :options="{fillColor:m.color,fillOpacity:0.1}"
+          ></GmapCircle>
+        </GmapMap>
       </div>
     </div>
   </section>
@@ -68,7 +101,8 @@ export default {
     return {
       coordinates: null,
       areaZone: null,
-      markers: []
+      markers: [],
+      ownMarker: null
     };
   },
 
@@ -103,14 +137,22 @@ export default {
         lat: this.areaZone.fields.coordinates[0],
         lng: this.areaZone.fields.coordinates[1]
       };
-      this.markers.push({ position: marker });
+      this.markers.push({ position: marker, color: "blue" });
     },
     addMarkerOwnPosition() {
       const marker = {
         lat: this.coordinates.lat,
         lng: this.coordinates.lng
       };
-      this.markers.push({ position: marker });
+      this.ownMarker = {
+        position: marker,
+        icon: "http://maps.google.com/mapfiles/kml/shapes/man.png"
+      };
+      /*  this.markers.push({
+        ownMarker: true,
+        position: marker,
+        icon: "http://maps.google.com/mapfiles/kml/shapes/man.png"
+      });*/
     }
   }
 };
@@ -121,9 +163,7 @@ export default {
 @import "../../assets/stylesheets/variables";
 
 .home {
-
   .block-home {
-
     display: grid;
     grid-template-areas: "info map";
     grid-template-columns: 2fr 3fr;
@@ -137,7 +177,6 @@ export default {
       border-radius: 10px;
 
       &_title-area {
-
         background-color: $grey;
         border-top-right-radius: 10px;
         border-top-left-radius: 10px;
