@@ -1,21 +1,60 @@
 <template>
   <section class="home">
-    <h1 v-if="areaZone">{{ areaZone.fields.location }}</h1>
 
-    <GmapMap
-      v-if="coordinates"
-      :center="{lat:coordinates.lat, lng:coordinates.lng}"
-      :zoom="13"
-      map-type-id="terrain"
-      style="width: 500px; height: 300px"
-    >
-      <gmap-marker
-        :key="index"
-        v-for="(m, index) in markers"
-        :position="m.position"
-        @click="center=m.position"
-      ></gmap-marker>
-    </GmapMap>
+    <div class="block-home">
+      <div class="info">
+        <div class="info_title-area">
+          <h1 class="info_title-area_title">Pollution de l'air à {{ areaZone.fields.location }}</h1>
+        </div>
+        <div class="info_content-area">
+          <h3>LIVE</h3>
+          <div class="info_content-area_quality" v-if="areaZone.fields.measurements_value >= 0 && areaZone.fields.measurements_value < 8.5">
+            <h2 class="info_content-area_quality_title">Très correcte</h2>
+            <i class="fas fa-check-circle very-correct info_content-area_quality_correct"></i>
+            <p class="info_content-area_quality_value">{{ areaZone.fields.measurements_value + ' ' + areaZone.fields.measurements_unit}}</p>
+          </div>
+          <div class="info_content-area_quality" v-if="areaZone.fields.measurements_value >= 8.5 && areaZone.fields.measurements_value < 13">
+            <h2 class="info_content-area_quality_title">Correcte</h2>
+            <i class="fas fa-check-circle correct info_content-area_quality_correct"></i>
+            <p class="info_content-area_quality_value">{{ areaZone.fields.measurements_value + ' ' + areaZone.fields.measurements_unit}}</p>
+          </div>
+          <div class="info_content-area_quality" v-if="areaZone.fields.measurements_value >= 13 && areaZone.fields.measurements_value < 18">
+            <h2 class="info_content-area_quality_title">Moyen</h2>
+            <i class="fas fa-check-circle medium info_content-area_quality_correct"></i>
+            <p class="info_content-area_quality_value">{{ areaZone.fields.measurements_value + ' ' + areaZone.fields.measurements_unit}}</p>
+          </div>
+          <div class="info_content-area_quality" v-if="areaZone.fields.measurements_value >= 18 && areaZone.fields.measurements_value < 22">
+            <h2 class="info_content-area_quality_title">Mauvais</h2>
+            <i class="fas fa-times-circle bad info_content-area_quality_correct"></i>
+            <p class="info_content-area_quality_value">{{ areaZone.fields.measurements_value + ' ' + areaZone.fields.measurements_unit}}</p>
+          </div>
+          <div class="info_content-area_quality" v-if="areaZone.fields.measurements_value >= 22 && areaZone.fields.measurements_value < 100000">
+            <h2 class="info_content-area_quality_title">Très mauvais</h2>
+            <i class="fas fa-times-circle very-bad info_content-area_quality_correct"></i>
+            <p class="info_content-area_quality_value">{{ areaZone.fields.measurements_value + ' ' + areaZone.fields.measurements_unit}}</p>
+          </div>
+        </div>
+      </div>
+
+      {{ areaZone }}
+
+      <div class="map">
+            <GmapMap
+              v-if="coordinates"
+              :center="{lat:coordinates.lat, lng:coordinates.lng}"
+              :zoom="13"
+              map-type-id="terrain"
+              style="width: 100%; height: 100%"
+            >
+              <gmap-marker
+                :key="index"
+                v-for="(m, index) in markers"
+                :position="m.position"
+                @click="center=m.position"
+              ></gmap-marker>
+            </GmapMap>
+      </div>
+    </div>
   </section>
 </template>
 
@@ -43,7 +82,7 @@ export default {
     this.$getLocation({}).then(coordinates => {
       axios
         .get(
-          "https://public.opendatasoft.com/api/records/1.0/search/?dataset=openaq&rows=1&sort=measurements_lastupdated&geofilter.distance=" +
+          "https://public.opendatasoft.com/api/records/1.0/search/?dataset=openaq&rows=1&refine.measurements_parameter=PM2.5&sort=measurements_lastupdated&geofilter.distance=" +
             coordinates.lat +
             "%2C" +
             coordinates.lng +
@@ -80,6 +119,92 @@ export default {
 
 <style scoped lang="scss">
 @import "../../assets/stylesheets/variables";
+
 .home {
+
+  .block-home {
+
+    display: grid;
+    grid-template-areas: "info map";
+    grid-template-columns: 2fr 3fr;
+    margin: 30px 10%;
+    height: 500px;
+
+    .info {
+      grid-area: info;
+      background-color: white;
+      margin-right: 2%;
+      border-radius: 10px;
+
+      &_title-area {
+
+        background-color: $grey;
+        border-top-right-radius: 10px;
+        border-top-left-radius: 10px;
+        height: 100px;
+        text-align: center;
+        color: $titleColor;
+
+        &_title {
+          padding-top: 20px;
+        }
+      }
+
+      &_content-area {
+        padding: 5%;
+
+        .very-correct {
+          color: #4bb0af;
+          font-size: 100px;
+        }
+
+        .correct {
+          color: #009600;
+          font-size: 100px;
+        }
+
+        .medium {
+          color: #ee8818;
+          font-size: 100px;
+        }
+
+        .bad {
+          color: #ff0600;
+          font-size: 100px;
+        }
+
+        .very-bad {
+          color: #000000;
+          font-size: 100px;
+        }
+
+        &_quality {
+          display: grid;
+          grid-template-areas: "title logo" "value .";
+          grid-template-columns: 4fr 1fr;
+          grid-template-rows: 1fr 1fr;
+
+          &_title {
+            grid-area: title;
+            padding-top: 35px;
+          }
+
+          &_logo {
+            grid-area: logo;
+          }
+
+          &_value {
+            grid-area: value;
+            margin-top: -28px;
+          }
+        }
+      }
+    }
+
+    .map {
+      grid-area: map;
+      margin-left: 2%;
+    }
+  }
 }
 </style>

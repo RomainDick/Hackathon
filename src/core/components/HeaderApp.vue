@@ -25,5 +25,7 @@ export default {
 @import "../../assets/stylesheets/_variables";
 
 .HeaderApp {
+  background-color: $grey;
+  padding: 20px;
 }
 </style>
