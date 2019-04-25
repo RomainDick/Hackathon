@@ -3,7 +3,8 @@
     <div v-if="areaZone" class="block-home">
       <div class="info">
         <div class="info_title-area">
-          <h1 class="info_title-area_title">Pollution de l'air à {{ areaZone.fields.location }}</h1>
+          <h1 class="info_title-area_title">Pollution de l'air à {{ city}}</h1>
+          <div class="meteo">Température actuelle : {{meteo.temp}}°C</div>
         </div>
         <div class="info_content-area">
           <h3>LIVE</h3>
@@ -93,7 +94,6 @@
 
 <script>
 import axios from "axios";
-
 export default {
   name: "home",
 
@@ -102,7 +102,9 @@ export default {
       coordinates: null,
       areaZone: null,
       markers: [],
-      ownMarker: null
+      ownMarker: null,
+      city: "",
+      meteo: null
     };
   },
 
@@ -129,9 +131,27 @@ export default {
       this.coordinates = coordinates;
       this.addMarkerOwnPosition();
     });
+    this.$getLocation({}).then(coordinates => {
+      axios
+        .get(
+          "http://api.openweathermap.org/data/2.5/weather?lat=" +
+            coordinates.lat +
+            "&lon=" +
+            coordinates.lng +
+            "&appid=5df8aa66c048c4e24edbdc1968460933"
+        )
+        .then(response => {
+          this.meteo = { temp: (response.data.main.temp - 273.15).toFixed(0) };
+          this.city = response.data.name;
+        });
+    });
   },
 
   methods: {
+    setMeteo(temp, city) {
+      this.meteo = temp;
+      this.city = city;
+    },
     addMarkers() {
       const marker = {
         lat: this.areaZone.fields.coordinates[0],
@@ -186,6 +206,9 @@ export default {
 
         &_title {
           padding-top: 20px;
+        }
+        .meteo {
+          margin: 5%;
         }
       }
 
