@@ -12,11 +12,13 @@
             class="info_content-area_quality"
             v-if="areaZone.fields.measurements_value >= 0 && areaZone.fields.measurements_value < 8.5"
           >
-            <h2 class="info_content-area_quality_title">Très correcte</h2>
+            <div class="info_content-area_quality_title">
+              <h2>Très correcte</h2>
+              <p
+                class="info_content-area_quality_value"
+              >{{ areaZone.fields.measurements_value + ' ' + areaZone.fields.measurements_unit}}</p>
+            </div>
             <i class="fas fa-check-circle very-correct info_content-area_quality_correct"></i>
-            <p
-              class="info_content-area_quality_value"
-            >{{ areaZone.fields.measurements_value + ' ' + areaZone.fields.measurements_unit}}</p>
           </div>
           <div
             class="info_content-area_quality"
@@ -57,6 +59,17 @@
             <p
               class="info_content-area_quality_value"
             >{{ areaZone.fields.measurements_value + ' ' + areaZone.fields.measurements_unit}}</p>
+          </div>
+          <div class="info_content-area_quality_first" v-if="areaZone">
+            <h2 class="info_content-area_quality_title">Liste d'activités conseillés:</h2>
+          </div>
+          <div class="info_content-area_quality" v-if="areaZone">
+            <h2 class="info_content-area_quality_title">#Marche</h2>
+            <i class="fas fa-check-circle very-correct info_content-area_quality_correct"></i>
+          </div>
+          <div class="info_content-area_quality" v-if="areaZone">
+            <h2 class="info_content-area_quality_title">#Course</h2>
+            <i class="fas fa-check-circle very-correct info_content-area_quality_correct"></i>
           </div>
         </div>
       </div>
@@ -233,9 +246,8 @@ export default {
 
         &_quality {
           display: grid;
-          grid-template-areas: "title logo" "value .";
+          grid-template-areas: "title logo";
           grid-template-columns: 4fr 1fr;
-          grid-template-rows: 1fr 1fr;
 
           &_title {
             grid-area: title;
@@ -247,8 +259,12 @@ export default {
           }
 
           &_value {
-            grid-area: value;
-            margin-top: -28px;
+            margin-top: 10px;
+            margin-left: 10px;
+          }
+          &_first {
+            border-top: 1px solid black;
+            margin-top: 30px;
           }
         }
       }
