@@ -7,7 +7,7 @@
           <div class="meteo">Température actuelle : {{meteo.temp}}°C</div>
         </div>
         <div class="info_content-area">
-          <h3>LIVE</h3>
+          <h3>PM2.5 en direct</h3>
           <div
             class="info_content-area_quality"
             v-if="areaZone.fields.measurements_value >= 0 && areaZone.fields.measurements_value < 8.5"
@@ -148,10 +148,6 @@ export default {
   },
 
   methods: {
-    setMeteo(temp, city) {
-      this.meteo = temp;
-      this.city = city;
-    },
     addMarkers() {
       const marker = {
         lat: this.areaZone.fields.coordinates[0],
@@ -168,11 +164,6 @@ export default {
         position: marker,
         icon: "http://maps.google.com/mapfiles/kml/shapes/man.png"
       };
-      /*  this.markers.push({
-        ownMarker: true,
-        position: marker,
-        icon: "http://maps.google.com/mapfiles/kml/shapes/man.png"
-      });*/
     }
   }
 };
