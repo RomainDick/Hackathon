@@ -199,7 +199,7 @@ export default {
       background-color: white;
       margin-right: 2%;
       border-radius: 10px;
-
+      box-shadow: 1px 1px 5px #555;
       &_title-area {
         background-color: $grey;
         border-top-right-radius: 10px;
@@ -273,6 +273,7 @@ export default {
     .map {
       grid-area: map;
       margin-left: 2%;
+      box-shadow: 1px 1px 5px #555;
     }
   }
 }
