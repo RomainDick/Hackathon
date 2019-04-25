@@ -1,5 +1,8 @@
 <template>
-  <footer class="FooterApp">footer</footer>
+  <footer class="FooterApp">
+
+    
+  </footer>
 </template>
 
 <script>
@@ -16,5 +19,7 @@ export default {
 @import "../../assets/stylesheets/_variables";
 
 .FooterApp {
+  background-color: $grey;
+  height:40px;
 }
 </style>

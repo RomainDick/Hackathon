@@ -1,5 +1,23 @@
 <template>
-  <header class="HeaderApp">header</header>
+  <header class='HeaderApp'>
+    <div class='HeaderApp__content'>
+
+      <router-link to="/">
+        <img src="../../assets/logo.png" width="45" height="45" alt="" style="margin-left:15px;">
+      </router-link>
+
+      <ul class='HeaderApp__list'>
+      
+        <li>
+          <!-- <router-link class='HeaderApp__link' to="/search">
+            <img src="@/assets/image/search.svg" alt="">
+          </router-link> -->
+        </li>
+
+      </ul>
+
+    </div>
+  </header>
 </template>
 
 <script>
@@ -26,6 +44,7 @@ export default {
 
 .HeaderApp {
   background-color: $grey;
-  padding: 20px;
+  width:100%;
 }
+
 </style>
