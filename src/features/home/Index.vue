@@ -63,14 +63,10 @@
           <div class="info_content-area_quality_first" v-if="areaZone">
             <h2 class="info_content-area_quality_title">Liste d'activités conseillés:</h2>
           </div>
-          <div class="info_content-area_quality" v-if="areaZone">
-            <h2 class="info_content-area_quality_title">#Marche</h2>
-            <i class="fas fa-check-circle very-correct info_content-area_quality_correct"></i>
-          </div>
-          <div class="info_content-area_quality" v-if="areaZone">
-            <h2 class="info_content-area_quality_title">#Course</h2>
-            <i class="fas fa-check-circle very-correct info_content-area_quality_correct"></i>
-          </div>
+        </div>
+        <div v-if="areaZone" >
+          <p class="tag">#Marcher</p>
+          <p class="tag">#Courir</p>
         </div>
       </div>
       <div v-if="coordinates" class="map">
@@ -100,6 +96,11 @@
             :options="{fillColor:m.color,fillOpacity:0.1}"
           ></GmapCircle>
         </GmapMap>
+      </div>
+    </div>
+    <div class="city">
+      <div class="city_block">
+
       </div>
     </div>
   </section>
@@ -189,7 +190,7 @@ export default {
 .home {
   .block-home {
     display: grid;
-    grid-template-areas: "info map";
+    grid-template-areas: "info map" "city .";
     grid-template-columns: 2fr 3fr;
     margin: 30px 10%;
     height: 500px;
@@ -275,6 +276,29 @@ export default {
       margin-left: 2%;
       box-shadow: 1px 1px 5px #555;
     }
+
+    .city {
+      grid-area: city;
+
+      &_block {
+        width: 100px;
+        height: 100px;
+        background-color: blue;
+      }
+    }
+  }
+
+  .tag {
+    background-color: $grey;
+    border-radius: 2px;
+    width: 100px;
+    font-size: 20px;
+    color: white;
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    text-align: center;
+    margin-bottom: 2px;
+    margin-left: 20px;
+    font-weight: bold;
   }
 }
 </style>

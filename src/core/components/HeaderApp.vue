@@ -6,10 +6,7 @@
         <a href="#home" class="w3-bar-item w3-button w3-wide header-text">AIREADY</a>
         <!-- Right-sided navbar links -->
         <div class="w3-right w3-hide-small header">
-          <a href="#about" class="w3-bar-item w3-button">ABOUT</a>
-          <a href="#team" class="w3-bar-item w3-button"><i class="fa fa-user"></i> TEAM</a>
-          <a href="#work" class="w3-bar-item w3-button"><i class="fa fa-th"></i> WORK</a>
-          <a href="#pricing" class="w3-bar-item w3-button"><i class="fa fa-usd"></i> PRICING</a>
+          <a href="#about" class="w3-bar-item w3-button">A PROPOS</a>
           <a href="#contact" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i> CONTACT</a>
         </div>
         <!-- Hide right-floated links on small screens and replace them with a menu icon -->
